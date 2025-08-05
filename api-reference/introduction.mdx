@@ -1,33 +1,38 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introduction"
+description: "Black Swan is an AI-driven credit scoring engine, bridging the data gap and enabling smarter, embedded lending for financial institutions and fintechs."
+mode: "wide"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Setting Up
 
-## Welcome
+To access Black Swan APIs, you'll need an API Key for authentication. Follow these steps:
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+### 1. Request an API Key
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+Contact the Black Swan Team through one of these channels:
+- **Email**: [hello@bsa.ai](mailto:help@bsa.ai)
+- **Dashboard**: Request through the service portal.
 
-## Authentication
+Please include:
+- Your organization's name
+- Use case (e.g., "credit scoring for SME loans")
+- Expected request volume (e.g., "100 calls/minute")
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+### 2. Receive Your Credentials
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+After approval, you'll receive:
+- A unique **Production API Key** (e.g., `bsa_live_123456789abcdef`)
+- A **Sandbox Key** for testing (if applicable)
+- Documentation links and rate limits
+
+### 3. Integrate the API
+
+Include your API Key in the `Authorization` header:
+
+```http
+GET /v1/credit-score/{customer_id} HTTP/1.1
+Host: api.bsa.ai
+Authorization: Bearer YOUR_API_KEY
+//Other required headers
 ```

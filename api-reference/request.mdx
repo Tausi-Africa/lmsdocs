@@ -1,0 +1,40 @@
+---
+mode: wide
+title: "Requests"
+description: "Understanding API requests formats and requirements"
+---
+
+# Getting Started
+
+All API requests require authentication and specific headers. Here's what you need to know:
+
+## Required Headers
+
+```http
+Authorization: Bearer YOUR_API_KEY
+x-user-id: YOUR_ORGANIZATION_ID
+Content-Type: application/json
+```
+
+# Request 
+
+A typical borrower scoring request includes:
+
+```http
+POST /v1/credit-score HTTP/1.1
+Host: api.bsa.ai
+Authorization: Bearer YOUR_API_KEY
+x-user-id: YOUR_ORGANIZATION_ID
+Content-Type: application/json
+
+{
+    "borrower_unique_number": "BWR-12345",
+    "borrower_country": "TZ",
+    "borrower_business_name": "Acme Inc",
+    "borrower_mobile": "+255712345678",
+    "borrower_email": "contact@bsa.ai",
+    "borrower_access_ids": ["ACC-1", "ACC-2"],
+    "custom_field_24036": "REG-987654"
+}
+```
+ 

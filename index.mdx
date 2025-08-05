@@ -1,97 +1,38 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Overview"
+description: "Black Swan is an AI-driven credit scoring engine, bridging the data gap and enabling smarter, embedded lending for financial institutions and fintechs."
+mode: "wide"
 ---
 
-## Setting up
+## Setting Up
 
-Get your documentation site up and running in minutes.
+To access Black Swan APIs, you'll need an API Key for authentication. Follow these steps:
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+### 1. Request an API Key
 
-## Make it yours
+Contact the Black Swan Team through one of these channels:
+- **Email**: [help@bsa.ai](mailto:help@bsa.ai)
+- **Dashboard**: Request through the service portal.
 
-Design a docs site that looks great and empowers your users.
+Please include:
+- Your organization's name
+- Use case (e.g., "credit scoring for SME loans")
+- Expected request volume (e.g., "100 calls/minute")
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+### 2. Receive Your Credentials
 
-## Create beautiful pages
+After approval, you'll receive:
+- A unique **Production API Key** (e.g., `bsa_live_123456789abcdef`)
+- A **Sandbox Key** for testing (if applicable)
+- Documentation links and rate limits
 
-Everything you need to create world-class documentation.
+### 3. Integrate the API
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+Include your API Key in the `Authorization` header:
 
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+```http
+GET /v1/credit-score?customer_id=123 HTTP/1.1
+Host: api.bsa.ai
+Authorization: Bearer YOUR_API_KEY
+Other unique required headers
+```

@@ -1,0 +1,52 @@
+---
+mode: wide
+title: "Responses"
+description: "Understanding API response formats, status codes, and error handling"
+toc: false
+---
+
+# 🚀 Response Basics
+
+```http
+# Standard Response Headers
+Content-Type: application/json
+x-request-id: SERVER_GENERATED_ID
+x-api-version: 1.2
+```
+
+
+## Success Response Example 
+
+An example of borrower response body. 
+
+```http
+{
+  "success": true,
+  "data": [{
+    "borrower_unique_number": "BWR-12345",
+    "borrower_country": "TZ",
+    "business_name": "Acme Inc",
+    "credit_score": 725,           
+    "score_confidence": 0.92,      
+    "decision": "approve",         
+    "risk_factors": ["high_utilization", "new_credit_account"]
+  }],
+}
+```
+
+## Failure Response Example
+
+An example of borrower response body. 
+
+```http
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_001",
+    "message": "Missing required field: borrower_country",
+    "details": {
+      "field": "borrower_data.borrower_country"
+    }
+  }
+}
+```
