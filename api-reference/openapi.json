@@ -1,381 +1,347 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "Loan Management System API",
+    "description": "API for managing loans, borrowers, and repayments in a financial system.",
+    "license": { "name": "MIT" },
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://lms.bsa.ai/api"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
+  "servers": [{ "url": "https://lms.bsa.ai/api" }],
+  "security": [{ "bearerAuth": [] }],
   "paths": {
     "/loans": {
       "get": {
-        "description": "Returns all loans from the system that the user has access to",
+        "summary": "List all loans",
+        "description": "Returns paginated loans accessible to the authenticated user.",
         "parameters": [
           {
             "name": "page",
             "in": "query",
-            "description": "The page number to return",
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
+            "description": "Page number for pagination (starts from 1).",
+            "schema": { "type": "integer", "format": "int32", "minimum": 1 }
           },
           {
             "name": "pageSize",
             "in": "query",
-            "description": "The page size to return per page",
+            "description": "Number of loans per page (default: 20, max: 100).",
             "schema": {
               "type": "integer",
-              "format": "int"
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Response",
+            "description": "Successful response with loan list.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Success"
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       },
       "post": {
-        "description": "Creates a new loan in the customers lms instance",
+        "summary": "Create a new loan",
+        "description": "Registers a new loan in the system with the provided details.",
         "requestBody": {
-          "description": "loan to add to the lms",
+          "description": "Loan creation payload.",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Loan"
-              }
+              "schema": { "$ref": "#/components/schemas/Loan" }
             }
           },
           "required": true
         },
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Loan created successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Success"
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       }
     },
     "/loans/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of loan to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
       "put": {
-        "description": "Updates loan details based on the ID supplied",
+        "summary": "Update a loan",
+        "description": "Modifies details of an existing loan by ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of loan to update",
+            "description": "Unique ID of the loan to update.",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
           }
         ],
         "requestBody": {
+          "description": "Updated loan data.",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Loan"
-              }
+              "schema": { "$ref": "#/components/schemas/Loan" }
             }
           },
           "required": true
         },
         "responses": {
           "200": {
-            "description": "Response",
+            "description": "Loan updated successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Success"
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a loan",
+        "description": "Permanently removes a loan record by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique ID of the loan to delete.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
           }
+        ],
+        "responses": {
+          "204": { "description": "Loan deleted successfully." },
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       }
     },
     "/borrowers": {
       "get": {
-        "description": "Returns all loans from the system that the user has access to",
+        "summary": "List all borrowers",
+        "description": "Returns paginated borrower records.",
         "parameters": [
           {
             "name": "page",
             "in": "query",
-            "description": "The page number to return",
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
+            "description": "Page number for pagination (starts from 1).",
+            "schema": { "type": "integer", "format": "int32", "minimum": 1 }
           },
           {
             "name": "pageSize",
             "in": "query",
-            "description": "The page size to return per page",
+            "description": "Number of borrowers per page (default: 20, max: 100).",
             "schema": {
               "type": "integer",
-              "format": "int"
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Response",
+            "description": "Successful response with borrower list.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Success"
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       },
       "post": {
-        "description": "Creates a new loan in the customers lms instance",
+        "summary": "Create a new borrower",
+        "description": "Registers a new borrower (individual or business) in the system.",
         "requestBody": {
-          "description": "loan to add to the lms",
+          "description": "Borrower creation payload.",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Borrower"
-              }
+              "schema": { "$ref": "#/components/schemas/Borrower" }
             }
           },
           "required": true
         },
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Borrower created successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Success"
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       }
     },
     "/borrowers/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of loan to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
       "put": {
-        "description": "Updates loan details based on the ID supplied",
+        "summary": "Update a borrower",
+        "description": "Modifies details of an existing borrower by ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of loan to update",
+            "description": "Unique ID of the borrower to update.",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int"
-            }
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
           }
         ],
         "requestBody": {
+          "description": "Updated borrower data.",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Borrower"
-              }
+              "schema": { "$ref": "#/components/schemas/Borrower" }
             }
           },
           "required": true
         },
         "responses": {
           "200": {
-            "description": "Response",
+            "description": "Borrower updated successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Success"
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/Success" }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a borrower",
+        "description": "Permanently removes a borrower record by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique ID of the borrower to delete.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
           }
+        ],
+        "responses": {
+          "204": { "description": "Borrower deleted successfully." },
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
+    },
+    "/repayments": {
+      "get": {
+        "summary": "List all repayments",
+        "description": "Returns paginated repayment records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination (starts from 1).",
+            "schema": { "type": "integer", "format": "int32", "minimum": 1 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of repayments per page (default: 20, max: 100).",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with repayment list.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a repayment",
+        "description": "Records a new repayment against a loan.",
+        "requestBody": {
+          "description": "Repayment creation payload.",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Repayment" }
+            }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Repayment recorded successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      }
+    },
+    "/repayments/{id}": {
+      "put": {
+        "summary": "Update a repayment",
+        "description": "Modifies details of an existing repayment by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique ID of the repayment to update.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
           }
+        ],
+        "requestBody": {
+          "description": "Updated repayment data.",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Repayment" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Repayment updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a repayment",
+        "description": "Permanently removes a repayment record by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique ID of the repayment to delete.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Repayment deleted successfully." },
+          "400": { "$ref": "#/components/responses/400Error" }
         }
       }
     }
@@ -510,16 +476,73 @@
           }
         }
       },
+      "Repayment": {
+        "required": ["loan_id", "loan_repayment_method_id", "collector_id"],
+        "type": "object",
+        "properties": {
+          "loan_id": {
+            "description": "ID of the loan being repaid.",
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "repayment_amount": {
+            "description": "Total amount repaid (principal + interest + fees + penalties).",
+            "type": "number",
+            "minimum": 0
+          },
+          "loan_repayment_method_id": {
+            "description": "ID of the repayment method (e.g., 1=cash, 2=bank transfer).",
+            "type": "integer",
+            "format": "int32"
+          },
+          "repayment_collected_date": {
+            "description": "Date when repayment was collected (YYYY-MM-DD).",
+            "type": "string",
+            "format": "date"
+          },
+          "collector_id": {
+            "description": "ID of the staff member/system that collected the payment.",
+            "type": "integer",
+            "format": "int64"
+          },
+          "principal_repayment_amount": {
+            "description": "Amount applied to loan principal.",
+            "type": "number",
+            "minimum": 0
+          },
+          "interest_repayment_amount": {
+            "description": "Amount applied to interest.",
+            "type": "number",
+            "minimum": 0
+          },
+          "fees_repayment_amount": {
+            "description": "Amount applied to fees.",
+            "type": "number",
+            "minimum": 0
+          },
+          "penalty_repayment_amount": {
+            "description": "Amount applied to penalties.",
+            "type": "number",
+            "minimum": 0
+          },
+          "repayment_description": {
+            "description": "Notes about the repayment (max 255 chars).",
+            "type": "string",
+            "maxLength": 255
+          }
+        }
+      },
       "Success": {
         "required": ["success", "data"],
         "type": "object",
         "properties": {
           "success": {
-            "description": "The operation was successfully",
+            "description": "True if the operation succeeded.",
             "type": "boolean"
           },
           "data": {
-            "description": "The created/updated record",
+            "description": "Response payload (varies by endpoint).",
             "type": "object"
           }
         }
@@ -529,11 +552,25 @@
         "type": "object",
         "properties": {
           "error": {
+            "description": "HTTP error code.",
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "example": 400
           },
           "message": {
-            "type": "string"
+            "description": "Human-readable error explanation.",
+            "type": "string",
+            "example": "Invalid loan ID"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400Error": {
+        "description": "Bad request due to invalid parameters or missing data.",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
           }
         }
       }
@@ -541,7 +578,8 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "description": "JWT token for authentication (format: `Bearer <token>`)."
       }
     }
   }

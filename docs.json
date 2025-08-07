@@ -7,7 +7,7 @@
     "light": "#e5e5e5",
     "dark": "#000000"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "favicon.ico",
   "navigation": {
     "tabs": [
       {
@@ -22,7 +22,7 @@
             ]
           },
           {
-            "group": "Borrower API",
+            "group": "Borrowers",
             "pages": [
               "api-reference/borrower/get",
               "api-reference/borrower/create",
@@ -31,12 +31,21 @@
             ]
           },
           {
-            "group": "Loan API",
+            "group": "Loans",
             "pages": [
               "api-reference/loan/get",
               "api-reference/loan/create",
               "api-reference/loan/delete",
               "api-reference/loan/update"
+            ]
+          },
+          {
+            "group": "Repayments",
+            "pages": [
+              "api-reference/repayment/get",
+              "api-reference/repayment/create",
+              "api-reference/repayment/delete",
+              "api-reference/repayment/update"
             ]
           }
         ]
@@ -51,13 +60,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:hello@bsa.ai"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Manka",
+      "href": "https://manka.tz"
     }
   },
   "contextual": {
@@ -72,11 +81,5 @@
       "vscode"
     ]
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
-  }
+  "footer": {}
 }
