@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://lms.bsa.ai"
+      "url": "https://lms.bsa.ai/api"
     }
   ],
   "security": [
@@ -24,24 +24,33 @@
         "description": "Returns all loans from the system that the user has access to",
         "parameters": [
           {
-            "name": "limit",
+            "name": "page",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "The page number to return",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The page size to return per page",
+            "schema": {
+              "type": "integer",
+              "format": "int"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Loan response",
+            "description": "Response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/Success"
                   }
                 }
               }
@@ -60,13 +69,13 @@
         }
       },
       "post": {
-        "description": "Creates a new plant in the store",
+        "description": "Creates a new loan in the customers lms instance",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "loan to add to the lms",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/Loan"
               }
             }
           },
@@ -74,11 +83,11 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/Success"
                 }
               }
             }
@@ -96,18 +105,18 @@
         }
       }
     },
-    "/plants/{id}": {
+    "/loans/{id}": {
       "delete": {
         "description": "Deletes a single plant based on the ID supplied",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of plant to delete",
+            "description": "ID of loan to delete",
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int"
             }
           }
         ],
@@ -115,6 +124,225 @@
           "204": {
             "description": "Plant deleted",
             "content": {}
+          },
+          "400": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Updates loan details based on the ID supplied",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of loan to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Loan"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Success"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/borrowers": {
+      "get": {
+        "description": "Returns all loans from the system that the user has access to",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page number to return",
+            "schema": {
+              "type": "integer",
+              "format": "int"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The page size to return per page",
+            "schema": {
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Success"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new loan in the customers lms instance",
+        "requestBody": {
+          "description": "loan to add to the lms",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Borrower"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/borrowers/{id}": {
+      "delete": {
+        "description": "Deletes a single plant based on the ID supplied",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of loan to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Plant deleted",
+            "content": {}
+          },
+          "400": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Updates loan details based on the ID supplied",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of loan to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Borrower"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Success"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "unexpected error",
@@ -154,37 +382,147 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": ["name"],
+      "Loan": {
+        "required": [
+          "loan_product_id",
+          "borrower_id",
+          "loan_application_id",
+          "loan_disbursed_by_id",
+          "loan_principal_amount",
+          "loan_released_date",
+          "loan_interest_method",
+          "loan_interest_type",
+          "loan_interest_period",
+          "loan_interest",
+          "loan_duration_period",
+          "loan_duration",
+          "loan_payment_scheme_id",
+          "loan_num_of_repayments",
+          "loan_decimal_places"
+        ],
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
+          "loan_product_id": {
+            "description": "The unique identifier for the loan product",
+            "type": "integer"
+          },
+          "borrower_id": {
+            "description": "The unique identifier of the borrower",
+            "type": "integer"
+          },
+          "loan_application_id": {
+            "description": "The unique identifier for the loan application",
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "loan_disbursed_by_id": {
+            "description": "The ID of the entity disbursing the loan",
+            "type": "integer"
+          },
+          "loan_principal_amount": {
+            "description": "The principal amount of the loan",
+            "type": "number"
+          },
+          "loan_released_date": {
+            "description": "The date when the loan was released",
+            "type": "string"
+          },
+          "loan_interest_method": {
+            "description": "The method used to calculate loan interest",
+            "type": "string"
+          },
+          "loan_interest_type": {
+            "description": "The type of interest applied to the loan",
+            "type": "string"
+          },
+          "loan_interest_period": {
+            "description": "The period for which interest is calculated",
+            "type": "string"
+          },
+          "loan_interest": {
+            "description": "The interest rate for the loan",
+            "type": "number"
+          },
+          "loan_duration_period": {
+            "description": "The time unit for the loan duration (e.g., days, months, years)",
+            "type": "string"
+          },
+          "loan_duration": {
+            "description": "The length of the loan in the specified duration period",
+            "type": "integer"
+          },
+          "loan_payment_scheme_id": {
+            "description": "The ID of the payment scheme for the loan",
+            "type": "integer"
+          },
+          "loan_num_of_repayments": {
+            "description": "The total number of repayments for the loan",
+            "type": "integer"
+          },
+          "loan_decimal_places": {
+            "description": "The number of decimal places to use for loan calculations",
             "type": "string"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "Borrower": {
+        "required": [
+          "borrower_business_name",
+          "borrower_unique_number",
+          "borrower_mobile",
+          "borrower_email",
+          "borrower_address",
+          "borrower_access_ids",
+          "custom_field_24036"
+        ],
+        "type": "object",
+        "properties": {
+          "borrower_country": {
+            "description": "The country where the borrower's business is legally registered and operates",
+            "type": "string"
           },
-          {
-            "required": ["id"],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
+          "borrower_business_name": {
+            "description": "The legal name of the borrower's business or company",
+            "type": "string"
+          },
+          "borrower_unique_number": {
+            "description": "Unique identifier or registration number for the borrower (e.g., tax ID, business registration number)",
+            "type": "string"
+          },
+          "borrower_mobile": {
+            "description": "Primary mobile phone number for the borrower, including country code",
+            "type": "string"
+          },
+          "borrower_email": {
+            "description": "Primary email address for the borrower, used for official communication",
+            "type": "string"
+          },
+          "borrower_address": {
+            "description": "Complete physical business address including street, city, and postal code",
+            "type": "string"
+          },
+          "borrower_access_ids": {
+            "description": "Comma-separated list of system access IDs or permissions granted to the borrower",
+            "type": "string"
+          },
+          "custom_field_24036": {
+            "description": "Custom field for additional borrower information (specific purpose should be documented separately)",
+            "type": "string"
           }
-        ]
+        }
+      },
+      "Success": {
+        "required": ["success", "data"],
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "The operation was successfully",
+            "type": "boolean"
+          },
+          "data": {
+            "description": "The created/updated record",
+            "type": "object"
+          }
+        }
       },
       "Error": {
         "required": ["error", "message"],
