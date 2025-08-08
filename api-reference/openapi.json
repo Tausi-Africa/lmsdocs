@@ -120,7 +120,7 @@
             "description": "Loan deleted successfully.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Success" }
+                "schema": { "$ref": "#/components/schemas/DeleteSuccess" }
               }
             }
           },
@@ -239,7 +239,7 @@
             "description": "Borrower deleted successfully.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Success" }
+                "schema": { "$ref": "#/components/schemas/DeleteSuccess" }
               }
             }
           },
@@ -358,7 +358,7 @@
             "description": "Repayment deleted successfully.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Success" }
+                "schema": { "$ref": "#/components/schemas/DeleteSuccess" }
               }
             }
           },
@@ -569,6 +569,20 @@
           "nextpage": {
             "description": "If next-page is available.",
             "type": "object"
+          },
+          "recordId": {
+            "description": "Record id of the current object",
+            "type": "string"
+          }
+        }
+      },
+      "DeleteSuccess": {
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "True if the operation succeeded.",
+            "type": "boolean"
           },
           "recordId": {
             "description": "Record id of the current object",
