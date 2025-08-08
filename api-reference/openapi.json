@@ -116,7 +116,14 @@
           }
         ],
         "responses": {
-          "204": { "description": "Loan deleted successfully." },
+          "204": {
+            "description": "Loan deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
           "400": { "$ref": "#/components/responses/400Error" }
         }
       }
@@ -228,7 +235,14 @@
           }
         ],
         "responses": {
-          "204": { "description": "Borrower deleted successfully." },
+          "204": {
+            "description": "Borrower deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
           "400": { "$ref": "#/components/responses/400Error" }
         }
       }
