@@ -21,8 +21,8 @@ Content-Type: application/json
 A typical borrower scoring request includes:
 
 ```http
-POST /v1/credit-score HTTP/1.1
-Host: api.bsa.ai
+GET /api/v1/credit-score/{borrower_id} HTTP/1.1
+Host: lms.bsa.ai
 Authorization: Bearer YOUR_API_KEY
 x-user-id: YOUR_ORGANIZATION_ID
 Content-Type: application/json
