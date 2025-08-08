@@ -6,7 +6,7 @@
     "license": { "name": "MIT" },
     "version": "1.0.0"
   },
-  "servers": [{ "url": "https://lms.bsa.ai/api" }],
+  "servers": [{ "url": "https://lms.bsa.ai/api/v1" }],
   "security": [{ "bearerAuth": [] }],
   "paths": {
     "/loans": {
@@ -17,7 +17,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Page number for pagination (starts from 1).",
+            "description": "Page number for pagination (defaults to 1).",
             "schema": { "type": "integer", "format": "int32", "minimum": 1 }
           },
           {
@@ -129,7 +129,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Page number for pagination (starts from 1).",
+            "description": "Page number for pagination (defaults to 1).",
             "schema": { "type": "integer", "format": "int32", "minimum": 1 }
           },
           {
@@ -241,7 +241,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Page number for pagination (starts from 1).",
+            "description": "Page number for pagination (defaults to 1).",
             "schema": { "type": "integer", "format": "int32", "minimum": 1 }
           },
           {
@@ -307,7 +307,7 @@
           }
         ],
         "requestBody": {
-          "description": "Updated repayment data.",
+          "description": "Updating repayment data.",
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/Repayment" }
@@ -340,7 +340,14 @@
           }
         ],
         "responses": {
-          "204": { "description": "Repayment deleted successfully." },
+          "204": {
+            "description": "Repayment deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Success" }
+              }
+            }
+          },
           "400": { "$ref": "#/components/responses/400Error" }
         }
       }
@@ -534,7 +541,7 @@
         }
       },
       "Success": {
-        "required": ["success", "data"],
+        "required": ["success"],
         "type": "object",
         "properties": {
           "success": {
@@ -544,14 +551,22 @@
           "data": {
             "description": "Response payload (varies by endpoint).",
             "type": "object"
+          },
+          "nextpage": {
+            "description": "If next-page is available.",
+            "type": "object"
+          },
+          "recordId": {
+            "description": "Record id of the current object",
+            "type": "string"
           }
         }
       },
       "Error": {
-        "required": ["error", "message"],
+        "required": ["code", "message"],
         "type": "object",
         "properties": {
-          "error": {
+          "code": {
             "description": "HTTP error code.",
             "type": "integer",
             "format": "int32",

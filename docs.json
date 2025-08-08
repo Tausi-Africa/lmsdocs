@@ -54,7 +54,7 @@
   },
   "logo": {
     "light": "/logo/logo_bsa.png",
-    "dark": "/logo/logo_bsa.png"
+    "dark": "/logo/logo-negative.png"
   },
   "navbar": {
     "links": [

@@ -5,7 +5,7 @@ description: "Understanding API response formats, status codes, and error handli
 toc: false
 ---
 
-# 🚀 Response Basics
+# Response Basics
 
 ```http
 # Standard Response Headers
@@ -40,13 +40,7 @@ An example of borrower response body.
 
 ```http
 {
-  "success": false,
-  "error": {
-    "code": "VALIDATION_001",
-    "message": "Missing required field: borrower_country",
-    "details": {
-      "field": "borrower_data.borrower_country"
-    }
-  }
+  "code": "101",
+  "message": "Missing required field: borrower_country",
 }
 ```
