@@ -171,31 +171,7 @@
             "description": "Loan updated successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Loan" }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of items (always 1 for single item)",
-                      "default": 1
-                    },
-                    "page": {
-                      "type": "integer",
-                      "description": "Current page number (always 1 for single item)",
-                      "default": 1
-                    },
-                    "rowsPerPage": {
-                      "type": "integer",
-                      "description": "Number of items per page (always 1 for single item)",
-                      "default": 1
-                    }
-                  },
-                  "required": ["items", "total", "page", "rowsPerPage"]
-                }
+                "schema": { "$ref": "#/components/schemas/Loan" }
               }
             }
           },
@@ -312,31 +288,7 @@
             "description": "Borrower created successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Borrower" }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of items (always 1 for single item)",
-                      "default": 1
-                    },
-                    "page": {
-                      "type": "integer",
-                      "description": "Current page number (always 1 for single item)",
-                      "default": 1
-                    },
-                    "rowsPerPage": {
-                      "type": "integer",
-                      "description": "Number of items per page (always 1 for single item)",
-                      "default": 1
-                    }
-                  },
-                  "required": ["items", "total", "page", "rowsPerPage"]
-                }
+                "schema": { "$ref": "#/components/schemas/Borrower" }
               }
             }
           },
@@ -419,31 +371,7 @@
             "description": "Borrower updated successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Borrower" }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of items (always 1 for single item)",
-                      "default": 1
-                    },
-                    "page": {
-                      "type": "integer",
-                      "description": "Current page number (always 1 for single item)",
-                      "default": 1
-                    },
-                    "rowsPerPage": {
-                      "type": "integer",
-                      "description": "Number of items per page (always 1 for single item)",
-                      "default": 1
-                    }
-                  },
-                  "required": ["items", "total", "page", "rowsPerPage"]
-                }
+                "schema": { "$ref": "#/components/schemas/Borrower" }
               }
             }
           },
@@ -560,31 +488,7 @@
             "description": "Repayment recorded successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Repayment" }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of items (always 1 for single item)",
-                      "default": 1
-                    },
-                    "page": {
-                      "type": "integer",
-                      "description": "Current page number (always 1 for single item)",
-                      "default": 1
-                    },
-                    "rowsPerPage": {
-                      "type": "integer",
-                      "description": "Number of items per page (always 1 for single item)",
-                      "default": 1
-                    }
-                  },
-                  "required": ["items", "total", "page", "rowsPerPage"]
-                }
+                "schema": { "$ref": "#/components/schemas/Repayment" }
               }
             }
           },
@@ -667,31 +571,7 @@
             "description": "Repayment updated successfully.",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "items": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Repayment" }
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of items (always 1 for single item)",
-                      "default": 1
-                    },
-                    "page": {
-                      "type": "integer",
-                      "description": "Current page number (always 1 for single item)",
-                      "default": 1
-                    },
-                    "rowsPerPage": {
-                      "type": "integer",
-                      "description": "Number of items per page (always 1 for single item)",
-                      "default": 1
-                    }
-                  },
-                  "required": ["items", "total", "page", "rowsPerPage"]
-                }
+                "schema": { "$ref": "#/components/schemas/Repayment" }
               }
             }
           },
@@ -762,6 +642,7 @@
           "borrower_mobile": { "type": "string" },
           "borrower_email": { "type": "string", "format": "email" },
           "borrower_address": { "type": "string" },
+          "borrower_credit_score": { "type": "integer", "format": "int32" },
           "custom_field_24036": { "type": "string" }
         }
       },
