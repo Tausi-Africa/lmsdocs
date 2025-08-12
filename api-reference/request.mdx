@@ -18,23 +18,30 @@ Content-Type: application/json
 
 # Request 
 
-A typical borrower scoring request includes:
+A typical adding of a loan includes:
 
 ```http
 POST /api/v1/borrowers HTTP/1.1
-Host: lms.bsa.ai
+Host: lms.tausi.africa
 Authorization: Bearer YOUR_API_KEY
 x-user-id: YOUR_ORGANIZATION_ID
 Content-Type: application/json
-
 {
-    "borrower_unique_number": "BWR-12345",
-    "borrower_country": "TZ",
-    "borrower_business_name": "Acme Inc",
-    "borrower_mobile": "+255712345678",
-    "borrower_email": "contact@bsa.ai",
-    "borrower_access_ids": ["ACC-1", "ACC-2"],
-    "custom_field_24036": "REG-987654"
+    "loan_id": 1011111,
+    "borrower_id": 1002,
+    "loan_application_id": "APP-2023-001",
+    "loan_disbursed_by_id": 2001,
+    "loan_principal_amount": 10000.50,
+    "loan_released_date": "2023-06-15",
+    "loan_interest_method": "Flat Rate",
+    "loan_interest_type": "Fixed",
+    "loan_interest_period": "Monthly",
+    "loan_interest": 5.25,
+    "loan_duration_period": "Months",
+    "loan_duration": 12,
+    "loan_payment_scheme_id": 3001,
+    "loan_num_of_repayments": 12,
+    "loan_decimal_places": "2"
 }
 ```
  

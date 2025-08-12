@@ -21,16 +21,23 @@ An example of borrower response body.
 
 ```http
 {
-  "success": true,
-  "data": [{
-    "borrower_unique_number": "BWR-12345",
-    "borrower_country": "TZ",
-    "business_name": "Acme Inc",
-    "credit_score": 725,           
-    "score_confidence": 0.92,      
-    "decision": "approve",         
-    "risk_factors": ["high_utilization", "new_credit_account"]
-  }],
+    "items": [
+        {
+            "ID": 1001,
+            "Country": "United States",
+            "BusinessName": "Acme Corporation",
+            "Phone": "+1 (555) 123-4567",
+            "Email": "conte@acmecorp.com",
+            "Address": "123 Main Street, Suite 400, New York, NY 10001",
+            "CreditScore": 0,
+            "RegistrationNumber": "US-ACME-2020-001",
+            "CreatedAt": "2025-08-12T10:19:27.447634Z",
+            "UpdatedAt": "2025-08-12T10:19:27.447634Z"
+        }
+    ],
+    "total": 11,
+    "page": 1,
+    "rowsPerPage": 1
 }
 ```
 
