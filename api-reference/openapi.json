@@ -6,7 +6,7 @@
     "license": { "name": "MIT" },
     "version": "1.0.0"
   },
-  "servers": [{ "url": "https://lms.tausi.africa/api/v1" }],
+  "servers": [{ "url": "https://lms.tausi.africa/v1" }],
   "security": [{ "bearerAuth": [] }],
   "paths": {
     "/loans": {
