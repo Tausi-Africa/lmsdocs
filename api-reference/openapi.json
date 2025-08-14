@@ -633,7 +633,11 @@
         }
       },
       "NewBorrower": {
-        "required": ["borrower_id", "borrower_business_name", "borrower_email"],
+        "required": [
+          "borrower_id",
+          "borrower_business_name",
+          "borrower_mobile"
+        ],
         "type": "object",
         "properties": {
           "borrower_id": { "type": "integer", "format": "int64" },
@@ -642,7 +646,6 @@
           "borrower_mobile": { "type": "string" },
           "borrower_email": { "type": "string", "format": "email" },
           "borrower_address": { "type": "string" },
-          "borrower_credit_score": { "type": "integer", "format": "int32" },
           "custom_field_24036": { "type": "string" }
         }
       },
