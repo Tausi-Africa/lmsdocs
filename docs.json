@@ -47,6 +47,15 @@
               "api-reference/repayment/delete",
               "api-reference/repayment/update"
             ]
+          },
+          {
+            "group": "Stocks",
+            "pages": [
+              "api-reference/stock/get",
+              "api-reference/stock/create",
+              "api-reference/stock/delete",
+              "api-reference/stock/update"
+            ]
           }
         ]
       }

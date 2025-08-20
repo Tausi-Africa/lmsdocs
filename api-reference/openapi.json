@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Loan Management System API",
-    "description": "API for managing loans, borrowers, and repayments in a financial system.",
+    "description": "API for managing loans, borrowers, repayments, and stocks in a financial system.",
     "license": { "name": "MIT" },
     "version": "1.0.0"
   },
@@ -619,6 +619,209 @@
           }
         }
       }
+    },
+    "/stocks": {
+      "get": {
+        "summary": "List all stocks",
+        "description": "Returns paginated stock records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with stock list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Stock" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "rowsPerPage": { "type": "integer" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "rowsPerPage",
+                    "success"
+                  ]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new stock",
+        "description": "Registers a new stock in the system.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewStock" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      }
+    },
+    "/stocks/{id}": {
+      "get": {
+        "summary": "Get stock by ID",
+        "description": "Returns a single stock by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with stock details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/404Error" }
+        }
+      },
+      "put": {
+        "summary": "Update stock",
+        "description": "Updates an existing stock's details.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateStock" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stock updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete stock",
+        "description": "Permanently removes a stock record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stock deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stock not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -682,15 +885,24 @@
           "region": { "type": "string" }
         }
       },
+      "NewProductItems": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "quantity": { "type": "integer" },
+          "price": { "type": "number", "format": "float" }
+        },
+        "required": ["stock_id", "quantity", "price"]
+      },
       "Loan": {
         "type": "object",
         "properties": {
           "borrower_id": { "type": "integer", "format": "int64" },
           "loan_id": { "type": "integer", "format": "int64" },
-          "product": { "type": "string" },
+          "loan_type": { "type": "string" },
           "principal_amount": { "type": "number", "format": "float" },
-          "released_date": { "type": "string", "format": "date-time" },
-          "due_date": { "type": "string", "format": "date-time" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
           "duration": { "type": "integer" },
           "duration_period": { "type": "string" },
           "description": { "type": "string" },
@@ -700,7 +912,6 @@
         "required": [
           "borrower_id",
           "loan_id",
-          "product",
           "principal_amount",
           "released_date",
           "due_date",
@@ -715,7 +926,11 @@
         "properties": {
           "borrower_id": { "type": "integer", "format": "int64" },
           "loan_id": { "type": "integer", "format": "int64" },
-          "product": { "type": "string" },
+          "loan_type": { "type": "string" },
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NewProductItems" }
+          },
           "principal_amount": { "type": "number", "format": "float" },
           "released_date": { "type": "string" },
           "due_date": { "type": "string" },
@@ -726,7 +941,7 @@
         "required": [
           "borrower_id",
           "loan_id",
-          "product",
+          "products",
           "principal_amount",
           "released_date",
           "due_date",
@@ -739,10 +954,10 @@
         "properties": {
           "borrower_id": { "type": "integer", "format": "int64" },
           "loan_id": { "type": "integer", "format": "int64" },
-          "product": { "type": "string" },
+          "loan_type": { "type": "string" },
           "principal_amount": { "type": "number", "format": "float" },
-          "released_date": { "type": "string", "format": "date-time" },
-          "due_date": { "type": "string", "format": "date-time" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
           "duration": { "type": "integer" },
           "duration_period": { "type": "string" },
           "description": { "type": "string" }
@@ -755,7 +970,7 @@
           "loan_id": { "type": "integer", "format": "int64" },
           "amount": { "type": "number", "format": "float" },
           "method": { "type": "string" },
-          "collection_date": { "type": "string", "format": "date-time" },
+          "collection_date": { "type": "string" },
           "collected_by": { "type": "string" },
           "description": { "type": "string" },
           "created_at": { "type": "string", "format": "date-time" },
@@ -777,7 +992,7 @@
           "loan_id": { "type": "integer", "format": "int64" },
           "amount": { "type": "number", "format": "float" },
           "method": { "type": "string" },
-          "collection_date": { "type": "string", "format": "date-time" },
+          "collection_date": { "type": "string" },
           "collected_by": { "type": "string" },
           "description": { "type": "string" }
         },
@@ -790,9 +1005,33 @@
           "loan_id": { "type": "integer", "format": "int64" },
           "amount": { "type": "number", "format": "float" },
           "method": { "type": "string" },
-          "collection_date": { "type": "string", "format": "date-time" },
+          "collection_date": { "type": "string" },
           "collected_by": { "type": "string" },
           "description": { "type": "string" }
+        }
+      },
+      "Stock": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "stock_name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["stock_id", "stock_name", "created_at", "updated_at"]
+      },
+      "NewStock": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "stock_name": { "type": "string" }
+        },
+        "required": ["stock_id", "stock_name"]
+      },
+      "UpdateStock": {
+        "type": "object",
+        "properties": {
+          "stock_name": { "type": "string" }
         }
       }
     },
