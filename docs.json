@@ -45,6 +45,7 @@
               "api-reference/repayment/get",
               "api-reference/repayment/create",
               "api-reference/repayment/delete",
+              "api-reference/repayment/bulkdelete",
               "api-reference/repayment/update"
             ]
           },

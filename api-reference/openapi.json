@@ -1,1078 +1,1140 @@
 {
-"openapi": "3.1.0",
-"info": {
-"title": "Loan Management System API",
-"description": "API for managing loans, borrowers, repayments, and stocks in a financial system.",
-"license": { "name": "MIT" },
-"version": "1.0.0"
-},
-"servers": [{ "url": "https://lms.tausi.africa/v1" }],
-"security": [{ "bearerAuth": [] }],
-"paths": {
-"/borrowers": {
-"get": {
-"summary": "List all borrowers",
-"description": "Returns paginated borrower records.",
-"parameters": [
-{
-"name": "page",
-"in": "query",
-"description": "Page number for pagination (defaults to 1).",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"default": 1
-}
-},
-{
-"name": "rows",
-"in": "query",
-"description": "Number of borrowers per page (default: 100, max: 100).",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"maximum": 100,
-"default": 100
-}
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with borrower list.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"items": {
-"type": "array",
-"items": { "$ref": "#/components/schemas/Borrower" }
-},
-"total": { "type": "integer" },
-"page": { "type": "integer" },
-"rowsPerPage": { "type": "integer" },
-"success": { "type": "boolean", "example": true }
-},
-"required": [
-"items",
-"total",
-"page",
-"rowsPerPage",
-"success"
-]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"post": {
-"summary": "Create a new borrower",
-"description": "Registers a new borrower in the system.",
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/NewBorrower" }
-}
-},
-"required": true
-},
-"responses": {
-"201": {
-"description": "Borrower created successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Borrower" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-}
-},
-"/borrowers/{id}": {
-"get": {
-"summary": "Get borrower by ID",
-"description": "Returns a single borrower by their ID.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with borrower details.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Borrower" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"404": { "$ref": "#/components/responses/404Error" }
-}
-},
-"put": {
-"summary": "Update borrower",
-"description": "Updates an existing borrower's details.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/UpdateBorrower" }
-}
-},
-"required": true
-},
-"responses": {
-"200": {
-"description": "Borrower updated successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Borrower" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"delete": {
-"summary": "Delete borrower",
-"description": "Permanently removes a borrower record.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Borrower deleted successfully",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": true },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-},
-"404": {
-"description": "Borrower not found",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": false },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-}
-}
-}
-},
-"/loans": {
-"get": {
-"summary": "List all loans",
-"description": "Returns paginated loan records.",
-"parameters": [
-{
-"name": "page",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"default": 1
-}
-},
-{
-"name": "rows",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"maximum": 100,
-"default": 100
-}
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with loan list.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"items": {
-"type": "array",
-"items": { "$ref": "#/components/schemas/Loan" }
-},
-"total": { "type": "integer" },
-"page": { "type": "integer" },
-"rowsPerPage": { "type": "integer" },
-"success": { "type": "boolean", "example": true }
-},
-"required": [
-"items",
-"total",
-"page",
-"rowsPerPage",
-"success"
-]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"post": {
-"summary": "Create a new loan",
-"description": "Registers a new loan in the system.",
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/NewLoan" }
-}
-},
-"required": true
-},
-"responses": {
-"201": {
-"description": "Loan created successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Loan" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-}
-},
-"/loans/{id}": {
-"get": {
-"summary": "Get loan by ID",
-"description": "Returns a single loan by its ID.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with loan details.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Loan" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"404": { "$ref": "#/components/responses/404Error" }
-}
-},
-"put": {
-"summary": "Update loan",
-"description": "Updates an existing loan's details.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/UpdateLoan" }
-}
-},
-"required": true
-},
-"responses": {
-"200": {
-"description": "Loan updated successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Loan" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"delete": {
-"summary": "Delete loan",
-"description": "Permanently removes a loan record.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Loan deleted successfully",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": true },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-},
-"404": {
-"description": "Loan not found",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": false },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-}
-}
-}
-},
-"/repayments": {
-"get": {
-"summary": "List all repayments",
-"description": "Returns paginated repayment records.",
-"parameters": [
-{
-"name": "page",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"default": 1
-}
-},
-{
-"name": "rows",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"maximum": 100,
-"default": 100
-}
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with repayment list.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"items": {
-"type": "array",
-"items": { "$ref": "#/components/schemas/Repayment" }
-},
-"total": { "type": "integer" },
-"page": { "type": "integer" },
-"rowsPerPage": { "type": "integer" },
-"success": { "type": "boolean", "example": true }
-},
-"required": [
-"items",
-"total",
-"page",
-"rowsPerPage",
-"success"
-]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"post": {
-"summary": "Create a repayment",
-"description": "Records a new repayment against a loan.",
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/NewRepayment" }
-}
-},
-"required": true
-},
-"responses": {
-"201": {
-"description": "Repayment created successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Repayment" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-}
-},
-"/repayments/{id}": {
-"get": {
-"summary": "Get repayment by ID",
-"description": "Returns a single repayment by its ID.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with repayment details.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Repayment" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"404": { "$ref": "#/components/responses/404Error" }
-}
-},
-"put": {
-"summary": "Update repayment",
-"description": "Updates an existing repayment's details.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/UpdateRepayment" }
-}
-},
-"required": true
-},
-"responses": {
-"200": {
-"description": "Repayment updated successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Repayment" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"delete": {
-"summary": "Delete repayment",
-"description": "Permanently removes a repayment record.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Repayment deleted successfully",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": true },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-},
-"404": {
-"description": "Repayment not found",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": false },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-}
-}
-}
-},
-"/stocks": {
-"get": {
-"summary": "List all stocks",
-"description": "Returns paginated stock records.",
-"parameters": [
-{
-"name": "page",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"default": 1
-}
-},
-{
-"name": "rows",
-"in": "query",
-"schema": {
-"type": "integer",
-"format": "int32",
-"minimum": 1,
-"maximum": 100,
-"default": 100
-}
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with stock list.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"items": {
-"type": "array",
-"items": { "$ref": "#/components/schemas/Stock" }
-},
-"total": { "type": "integer" },
-"page": { "type": "integer" },
-"rowsPerPage": { "type": "integer" },
-"success": { "type": "boolean", "example": true }
-},
-"required": [
-"items",
-"total",
-"page",
-"rowsPerPage",
-"success"
-]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"post": {
-"summary": "Create a new stock",
-"description": "Registers a new stock in the system.",
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/NewStock" }
-}
-},
-"required": true
-},
-"responses": {
-"201": {
-"description": "Stock created successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Stock" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-}
-},
-"/stocks/{id}": {
-"get": {
-"summary": "Get stock by ID",
-"description": "Returns a single stock by its ID.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Successful response with stock details.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Stock" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"404": { "$ref": "#/components/responses/404Error" }
-}
-},
-"put": {
-"summary": "Update stock",
-"description": "Updates an existing stock's details.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"requestBody": {
-"content": {
-"application/json": {
-"schema": { "$ref": "#/components/schemas/UpdateStock" }
-}
-},
-"required": true
-},
-"responses": {
-"200": {
-"description": "Stock updated successfully.",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"item": { "$ref": "#/components/schemas/Stock" },
-"success": { "type": "boolean", "example": true }
-},
-"required": ["item", "success"]
-}
-}
-}
-},
-"400": { "$ref": "#/components/responses/400Error" }
-}
-},
-"delete": {
-"summary": "Delete stock",
-"description": "Permanently removes a stock record.",
-"parameters": [
-{
-"name": "id",
-"in": "path",
-"required": true,
-"schema": { "type": "integer", "format": "int64" }
-}
-],
-"responses": {
-"200": {
-"description": "Stock deleted successfully",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": true },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-},
-"404": {
-"description": "Stock not found",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"success": { "type": "boolean", "example": false },
-"message": { "type": "string" }
-},
-"required": ["success", "message"]
-}
-}
-}
-}
-}
-}
-}
-},
-"components": {
-"schemas": {
-"Borrower": {
-"type": "object",
-"properties": {
-"id": { "type": "integer", "format": "int64" },
-"country": { "type": "string" },
-"business_name": { "type": "string" },
-"phone": { "type": "string" },
-"email": { "type": "string", "format": "email" },
-"address": { "type": "string" },
-"type": { "type": "string" },
-"credit_score": { "type": "number", "format": "float" },
-"region": { "type": "string" },
-"created_at": { "type": "string", "format": "date-time" },
-"updated_at": { "type": "string", "format": "date-time" }
-},
-"required": [
-"id",
-"business_name",
-"phone",
-"address",
-"type",
-"region",
-"created_at",
-"updated_at"
-]
-},
-"NewBorrower": {
-"type": "object",
-"properties": {
-"id": { "type": "integer", "format": "int64" },
-"country": { "type": "string" },
-"business_name": { "type": "string" },
-"phone": { "type": "string" },
-"email": { "type": "string", "format": "email" },
-"address": { "type": "string" },
-"type": { "type": "string" },
-"region": { "type": "string" }
-},
-"required": [
-"id",
-"business_name",
-"phone",
-"address",
-"type",
-"region"
-]
-},
-"UpdateBorrower": {
-"type": "object",
-"properties": {
-"country": { "type": "string" },
-"business_name": { "type": "string" },
-"phone": { "type": "string" },
-"email": { "type": "string", "format": "email" },
-"address": { "type": "string" },
-"type": { "type": "string" },
-"region": { "type": "string" }
-}
-},
-"NewProductItems": {
-"type": "object",
-"properties": {
-"stock_id": { "type": "integer", "format": "int64" },
-"quantity": { "type": "integer" },
-"price": { "type": "number", "format": "float" }
-},
-"required": ["stock_id", "quantity", "price"]
-},
-"Loan": {
-"type": "object",
-"properties": {
-"borrower_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"loan_type": { "type": "string" },
-"principal_amount": { "type": "number", "format": "float" },
-"released_date": { "type": "string" },
-"due_date": { "type": "string" },
-"duration": { "type": "integer" },
-"duration_period": { "type": "string" },
-"description": { "type": "string" },
-"created_at": { "type": "string", "format": "date-time" },
-"updated_at": { "type": "string", "format": "date-time" }
-},
-"required": [
-"borrower_id",
-"loan_id",
-"principal_amount",
-"released_date",
-"due_date",
-"duration",
-"duration_period",
-"created_at",
-"updated_at"
-]
-},
-"NewLoan": {
-"type": "object",
-"properties": {
-"borrower_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"loan_type": { "type": "string" },
-"products": {
-"type": "array",
-"items": { "$ref": "#/components/schemas/NewProductItems" }
-},
-"principal_amount": { "type": "number", "format": "float" },
-"released_date": { "type": "string" },
-"due_date": { "type": "string" },
-"duration": { "type": "integer" },
-"duration_period": { "type": "string" },
-"description": { "type": "string" }
-},
-"required": [
-"borrower_id",
-"loan_id",
-"products",
-"principal_amount",
-"released_date",
-"due_date",
-"duration",
-"duration_period"
-]
-},
-"UpdateLoan": {
-"type": "object",
-"properties": {
-"borrower_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"loan_type": { "type": "string" },
-"principal_amount": { "type": "number", "format": "float" },
-"released_date": { "type": "string" },
-"due_date": { "type": "string" },
-"duration": { "type": "integer" },
-"duration_period": { "type": "string" },
-"description": { "type": "string" }
-}
-},
-"Repayment": {
-"type": "object",
-"properties": {
-"repayment_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"amount": { "type": "number", "format": "float" },
-"method": { "type": "string" },
-"collection_date": { "type": "string" },
-"collected_by": { "type": "string" },
-"description": { "type": "string" },
-"created_at": { "type": "string", "format": "date-time" },
-"updated_at": { "type": "string", "format": "date-time" }
-},
-"required": [
-"repayment_id",
-"loan_id",
-"amount",
-"collection_date",
-"created_at",
-"updated_at"
-]
-},
-"NewRepayment": {
-"type": "object",
-"properties": {
-"repayment_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"amount": { "type": "number", "format": "float" },
-"method": { "type": "string" },
-"collection_date": { "type": "string" },
-"collected_by": { "type": "string" },
-"description": { "type": "string" }
-},
-"required": ["repayment_id", "loan_id", "amount", "collection_date"]
-},
-"UpdateRepayment": {
-"type": "object",
-"properties": {
-"repayment_id": { "type": "integer", "format": "int64" },
-"loan_id": { "type": "integer", "format": "int64" },
-"amount": { "type": "number", "format": "float" },
-"method": { "type": "string" },
-"collection_date": { "type": "string" },
-"collected_by": { "type": "string" },
-"description": { "type": "string" }
-}
-},
-"Stock": {
-"type": "object",
-"properties": {
-"stock_id": { "type": "integer", "format": "int64" },
-"stock_name": { "type": "string" },
-"created_at": { "type": "string", "format": "date-time" },
-"updated_at": { "type": "string", "format": "date-time" }
-},
-"required": ["stock_id", "stock_name", "created_at", "updated_at"]
-},
-"NewStock": {
-"type": "object",
-"properties": {
-"stock_id": { "type": "integer", "format": "int64" },
-"stock_name": { "type": "string" }
-},
-"required": ["stock_id", "stock_name"]
-},
-"UpdateStock": {
-"type": "object",
-"properties": {
-"stock_name": { "type": "string" }
-}
-}
-},
-"responses": {
-"400Error": {
-"description": "Bad request",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"code": { "type": "string" },
-"message": { "type": "string" }
-},
-"required": ["code", "message"]
-}
-}
-}
-},
-"404Error": {
-"description": "Resource not found",
-"content": {
-"application/json": {
-"schema": {
-"type": "object",
-"properties": {
-"code": { "type": "string" },
-"message": { "type": "string" }
-},
-"required": ["code", "message"]
-}
-}
-}
-}
-},
-"securitySchemes": {
-"bearerAuth": {
-"type": "http",
-"scheme": "bearer",
-"bearerFormat": "JWT"
-}
-}
-}
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Loan Management System API",
+    "description": "API for managing loans, borrowers, repayments, and stocks in a financial system.",
+    "license": { "name": "MIT" },
+    "version": "1.0.0"
+  },
+  "servers": [{ "url": "https://lms.tausi.africa/v1" }],
+  "security": [{ "bearerAuth": [] }],
+  "paths": {
+    "/borrowers": {
+      "get": {
+        "summary": "List all borrowers",
+        "description": "Returns paginated borrower records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination (defaults to 1).",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "description": "Number of borrowers per page (default: 100, max: 100).",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with borrower list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Borrower" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "rowsPerPage": { "type": "integer" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "rowsPerPage",
+                    "success"
+                  ]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new borrower",
+        "description": "Registers a new borrower in the system.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewBorrower" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Borrower created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Borrower" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      }
+    },
+    "/borrowers/{id}": {
+      "get": {
+        "summary": "Get borrower by ID",
+        "description": "Returns a single borrower by their ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with borrower details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Borrower" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/404Error" }
+        }
+      },
+      "put": {
+        "summary": "Update borrower",
+        "description": "Updates an existing borrower's details.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateBorrower" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Borrower updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Borrower" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete borrower",
+        "description": "Permanently removes a borrower record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Borrower deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Borrower not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loans": {
+      "get": {
+        "summary": "List all loans",
+        "description": "Returns paginated loan records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with loan list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Loan" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "rowsPerPage": { "type": "integer" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "rowsPerPage",
+                    "success"
+                  ]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new loan",
+        "description": "Registers a new loan in the system.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewLoan" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Loan created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Loan" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      }
+    },
+    "/loans/{id}": {
+      "get": {
+        "summary": "Get loan by ID",
+        "description": "Returns a single loan by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with loan details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Loan" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/404Error" }
+        }
+      },
+      "put": {
+        "summary": "Update loan",
+        "description": "Updates an existing loan's details.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateLoan" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Loan updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Loan" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete loan",
+        "description": "Permanently removes a loan record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Loan deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Loan not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repayments": {
+      "get": {
+        "summary": "List all repayments",
+        "description": "Returns paginated repayment records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with repayment list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Repayment" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "rowsPerPage": { "type": "integer" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "rowsPerPage",
+                    "success"
+                  ]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a repayment",
+        "description": "Records a new repayment against a loan.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewRepayment" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Repayment created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Repayment" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Bulk delete repayments",
+        "description": "Permanently removes multiple repayment records by their IDs.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": { "type": "integer", "format": "int64" }
+                  }
+                },
+                "required": ["ids"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Repayments deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" },
+          "404": {
+            "description": "Repayments not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repayments/{id}": {
+      "get": {
+        "summary": "Get repayment by ID",
+        "description": "Returns a single repayment by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with repayment details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Repayment" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/404Error" }
+        }
+      },
+      "put": {
+        "summary": "Update repayment",
+        "description": "Updates an existing repayment's details.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateRepayment" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Repayment updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Repayment" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete repayment",
+        "description": "Permanently removes a repayment record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Repayment deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Repayment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stocks": {
+      "get": {
+        "summary": "List all stocks",
+        "description": "Returns paginated stock records.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with stock list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Stock" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "rowsPerPage": { "type": "integer" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "rowsPerPage",
+                    "success"
+                  ]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new stock",
+        "description": "Registers a new stock in the system.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewStock" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      }
+    },
+    "/stocks/{id}": {
+      "get": {
+        "summary": "Get stock by ID",
+        "description": "Returns a single stock by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with stock details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/404Error" }
+        }
+      },
+      "put": {
+        "summary": "Update stock",
+        "description": "Updates an existing stock's details.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateStock" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stock updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": { "$ref": "#/components/schemas/Stock" },
+                    "success": { "type": "boolean", "example": true }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete stock",
+        "description": "Permanently removes a stock record.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stock deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stock not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Borrower": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "country": { "type": "string" },
+          "business_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "address": { "type": "string" },
+          "type": { "type": "string" },
+          "credit_score": { "type": "number", "format": "float" },
+          "region": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": [
+          "id",
+          "business_name",
+          "phone",
+          "address",
+          "type",
+          "region",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "NewBorrower": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "country": { "type": "string" },
+          "business_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "address": { "type": "string" },
+          "type": { "type": "string" },
+          "region": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "business_name",
+          "phone",
+          "address",
+          "type",
+          "region"
+        ]
+      },
+      "UpdateBorrower": {
+        "type": "object",
+        "properties": {
+          "country": { "type": "string" },
+          "business_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "address": { "type": "string" },
+          "type": { "type": "string" },
+          "region": { "type": "string" }
+        }
+      },
+      "NewProductItems": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "quantity": { "type": "integer" },
+          "price": { "type": "number", "format": "float" }
+        },
+        "required": ["stock_id", "quantity", "price"]
+      },
+      "Loan": {
+        "type": "object",
+        "properties": {
+          "borrower_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "loan_type": { "type": "string" },
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NewProductItems" }
+          },
+          "principal_amount": { "type": "number", "format": "float" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_period": { "type": "string" },
+          "description": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": [
+          "borrower_id",
+          "loan_id",
+          "principal_amount",
+          "released_date",
+          "due_date",
+          "duration",
+          "duration_period",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "NewLoan": {
+        "type": "object",
+        "properties": {
+          "borrower_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "loan_type": { "type": "string" },
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NewProductItems" }
+          },
+          "principal_amount": { "type": "number", "format": "float" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_period": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": [
+          "borrower_id",
+          "loan_id",
+          "products",
+          "principal_amount",
+          "released_date",
+          "due_date",
+          "duration",
+          "duration_period"
+        ]
+      },
+      "UpdateLoan": {
+        "type": "object",
+        "properties": {
+          "borrower_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "loan_type": { "type": "string" },
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NewProductItems" }
+          },
+          "principal_amount": { "type": "number", "format": "float" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_period": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "Repayment": {
+        "type": "object",
+        "properties": {
+          "repayment_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "amount": { "type": "number", "format": "float" },
+          "method": { "type": "string" },
+          "collection_date": { "type": "string" },
+          "collected_by": { "type": "string" },
+          "description": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": [
+          "repayment_id",
+          "loan_id",
+          "amount",
+          "collection_date",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "NewRepayment": {
+        "type": "object",
+        "properties": {
+          "repayment_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "amount": { "type": "number", "format": "float" },
+          "method": { "type": "string" },
+          "collection_date": { "type": "string" },
+          "collected_by": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["repayment_id", "loan_id", "amount", "collection_date"]
+      },
+      "UpdateRepayment": {
+        "type": "object",
+        "properties": {
+          "repayment_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "amount": { "type": "number", "format": "float" },
+          "method": { "type": "string" },
+          "collection_date": { "type": "string" },
+          "collected_by": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "Stock": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "stock_name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["stock_id", "stock_name", "created_at", "updated_at"]
+      },
+      "NewStock": {
+        "type": "object",
+        "properties": {
+          "stock_id": { "type": "integer", "format": "int64" },
+          "stock_name": { "type": "string" }
+        },
+        "required": ["stock_id", "stock_name"]
+      },
+      "UpdateStock": {
+        "type": "object",
+        "properties": {
+          "stock_name": { "type": "string" }
+        }
+      }
+    },
+    "responses": {
+      "400Error": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "string" },
+                "message": { "type": "string" }
+              },
+              "required": ["code", "message"]
+            }
+          }
+        }
+      },
+      "404Error": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "string" },
+                "message": { "type": "string" }
+              },
+              "required": ["code", "message"]
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
 }
