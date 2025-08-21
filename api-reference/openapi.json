@@ -251,7 +251,7 @@
                   "properties": {
                     "items": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/Loan" }
+                      "items": { "$ref": "#/components/schemas/QueryLoans" }
                     },
                     "total": { "type": "integer" },
                     "page": { "type": "integer" },
@@ -1004,6 +1004,22 @@
           "price": { "type": "number", "format": "float" }
         },
         "required": ["stock_id", "quantity", "price"]
+      },
+      "QueryLoans": {
+        "type": "object",
+        "properties": {
+          "borrower_id": { "type": "integer", "format": "int64" },
+          "loan_id": { "type": "integer", "format": "int64" },
+          "loan_type": { "type": "string" },
+          "principal_amount": { "type": "number", "format": "float" },
+          "released_date": { "type": "string" },
+          "due_date": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_period": { "type": "string" },
+          "description": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
       },
       "Loan": {
         "type": "object",

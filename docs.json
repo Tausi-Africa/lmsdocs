@@ -25,6 +25,7 @@
             "group": "Borrowers",
             "pages": [
               "api-reference/borrower/get",
+              "api-reference/borrower/getrecord",
               "api-reference/borrower/create",
               "api-reference/borrower/delete",
               "api-reference/borrower/update"
@@ -34,6 +35,7 @@
             "group": "Loans",
             "pages": [
               "api-reference/loan/get",
+              "api-reference/loan/getrecord",
               "api-reference/loan/create",
               "api-reference/loan/delete",
               "api-reference/loan/update"
@@ -43,6 +45,7 @@
             "group": "Repayments",
             "pages": [
               "api-reference/repayment/get",
+              "api-reference/repayment/getrecord",
               "api-reference/repayment/create",
               "api-reference/repayment/delete",
               "api-reference/repayment/bulkdelete",
@@ -53,6 +56,7 @@
             "group": "Stocks",
             "pages": [
               "api-reference/stock/get",
+              "api-reference/stock/getrecord",
               "api-reference/stock/create",
               "api-reference/stock/delete",
               "api-reference/stock/update"
