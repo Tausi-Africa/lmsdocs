@@ -674,6 +674,63 @@
         }
       }
     },
+    "/bulk/repayments": {
+      "delete": {
+        "summary": "Bulk delete repayments",
+        "description": "Permanently removes multiple repayment records by their IDs.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": { "type": "integer", "format": "int64" }
+                  }
+                },
+                "required": ["ids"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Repayments deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400Error" },
+          "404": {
+            "description": "Repayments not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/stocks": {
       "get": {
         "summary": "List all stocks",
