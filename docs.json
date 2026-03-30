@@ -41,7 +41,6 @@
               "api-reference/loan/get",
               "api-reference/loan/getrecord",
               "api-reference/loan/create",
-              "api-reference/loan/delete",
               "api-reference/loan/update"
             ]
           },
@@ -50,10 +49,7 @@
             "pages": [
               "api-reference/repayment/get",
               "api-reference/repayment/getrecord",
-              "api-reference/repayment/create",
-              "api-reference/repayment/delete",
-              "api-reference/repayment/bulkdelete",
-              "api-reference/repayment/update"
+              "api-reference/repayment/create"
             ]
           }
         ]
