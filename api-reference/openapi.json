@@ -6,7 +6,7 @@
     "license": { "name": "MIT" },
     "version": "1.0.0"
   },
-  "servers": [{ "url": "https://lms.tausi.africa/v1" }],
+  "servers": [{ "url": "https://lms.bsa.ai/v1" }],
   "security": [{ "bearerAuth": [] }],
   "paths": {
     "/borrowers": {
@@ -207,6 +207,85 @@
                     "message": { "type": "string" }
                   },
                   "required": ["success", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credit-decisions/{borrower_id}": {
+      "get": {
+        "summary": "Get credit decision by borrower ID",
+        "description": "Returns credit decision details for a specific borrower.",
+        "operationId": "getCreditDecisionByBorrowerId",
+        "parameters": [
+          {
+            "name": "borrower_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the borrower",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with credit decision details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": {
+                      "$ref": "#/components/schemas/CreditDecision"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": ["item", "success"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["code", "message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Credit decision not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["code", "message"]
                 }
               }
             }
@@ -504,60 +583,6 @@
           },
           "400": { "$ref": "#/components/responses/400Error" }
         }
-      },
-      "delete": {
-        "summary": "Bulk delete repayments",
-        "description": "Permanently removes multiple repayment records by their IDs.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ids": {
-                    "type": "array",
-                    "items": { "type": "integer", "format": "int64" }
-                  }
-                },
-                "required": ["ids"]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Repayments deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["success", "message"]
-                }
-              }
-            }
-          },
-          "400": { "$ref": "#/components/responses/400Error" },
-          "404": {
-            "description": "Repayments not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": false },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["success", "message"]
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/repayments/{id}": {
@@ -674,63 +699,6 @@
         }
       }
     },
-    "/bulk/repayments": {
-      "delete": {
-        "summary": "Bulk delete repayments",
-        "description": "Permanently removes multiple repayment records by their IDs.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ids": {
-                    "type": "array",
-                    "items": { "type": "integer", "format": "int64" }
-                  }
-                },
-                "required": ["ids"]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Repayments deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["success", "message"]
-                }
-              }
-            }
-          },
-          "400": { "$ref": "#/components/responses/400Error" },
-          "404": {
-            "description": "Repayments not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": false },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["success", "message"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
     "/stocks": {
       "get": {
         "summary": "List all stocks",
@@ -952,16 +920,7 @@
           "created_at": { "type": "string", "format": "date-time" },
           "updated_at": { "type": "string", "format": "date-time" }
         },
-        "required": [
-          "id",
-          "business_name",
-          "phone",
-          "address",
-          "type",
-          "region",
-          "created_at",
-          "updated_at"
-        ]
+        "required": ["id", "business_name", "phone", "created_at", "updated_at"]
       },
       "NewBorrower": {
         "type": "object",
@@ -995,6 +954,68 @@
           "type": { "type": "string" },
           "region": { "type": "string" }
         }
+      },
+      "CreditDecision": {
+        "type": "object",
+        "properties": {
+          "fulltimestamp": {
+            "type": "string",
+            "format": "date",
+            "description": "The timestamp of the credit decision",
+            "example": "2026-03-30"
+          },
+          "borrower_id": {
+            "type": "string",
+            "description": "The ID of the borrower",
+            "example": "1"
+          },
+          "decision": {
+            "type": "string",
+            "description": "The credit decision outcome",
+            "example": "Passed First Loan Allocation"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the decision",
+            "example": "match 1:1"
+          },
+          "gate": {
+            "type": "string",
+            "description": "The gate level",
+            "example": "G2"
+          },
+          "credit_limit": {
+            "type": "integer",
+            "description": "The credit limit amount",
+            "example": 0
+          },
+          "credit_score": {
+            "type": "integer",
+            "description": "The borrower's credit score",
+            "example": 131
+          },
+          "overdue_days": {
+            "type": "integer",
+            "description": "Number of days overdue",
+            "example": 0
+          },
+          "method": {
+            "type": "string",
+            "description": "The scoring method used",
+            "example": "application_scorecard"
+          }
+        },
+        "required": [
+          "fulltimestamp",
+          "borrower_id",
+          "decision",
+          "description",
+          "gate",
+          "credit_limit",
+          "credit_score",
+          "overdue_days",
+          "method"
+        ]
       },
       "NewProductItems": {
         "type": "object",
