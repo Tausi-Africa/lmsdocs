@@ -1048,10 +1048,6 @@
           "borrower_id": { "type": "integer", "format": "int64" },
           "loan_id": { "type": "integer", "format": "int64" },
           "loan_type": { "type": "string" },
-          "products": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/NewProductItems" }
-          },
           "principal_amount": { "type": "number", "format": "float" },
           "released_date": { "type": "string" },
           "due_date": { "type": "string" },
@@ -1079,10 +1075,6 @@
           "borrower_id": { "type": "integer", "format": "int64" },
           "loan_id": { "type": "integer", "format": "int64" },
           "loan_type": { "type": "string" },
-          "products": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/NewProductItems" }
-          },
           "principal_amount": { "type": "number", "format": "float" },
           "released_date": { "type": "string" },
           "due_date": { "type": "string" },
